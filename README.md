@@ -6,7 +6,7 @@ This project demonstrates how regression analysis is created as an ArcGIS projec
 
 The defined variables' means will be used and defined while running code, others variables contain the features' name
 which has existed in the `final_project` database and are frequently is used. Furthermore, a list of global or read-only
-variables also exists here, the value of each variable starts with an underscore which is used to keep the temporary
+variables also exists here, the value of each variable which is used to keep the temporary
 features' name.
 
 ```

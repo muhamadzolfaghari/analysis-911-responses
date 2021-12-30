@@ -2,26 +2,15 @@ import arcpy
 
 arcpy.env.workspace = './final_project.gdb/cs50_project'
 
-# The defined variables will be used and defined while running code, others variables contain the features' name which
-# has existed in the `final_project` database and are frequently is used while running the program. Furthermore, a list
-# of global or read-only variables also exists here, the value of each variable starts with an underscore, which is used
-# to keep the temporary features' name.
-CALLS = "_calls"
-OBS_CALLS = "_obs_calls"
-CALLS_COUNT = "_calls_count"
-CALLS_HOTSPOT = "_calls_hotspot"
-GWR_911_CALLS = '_gwr_911_calls'
+# At here we have the list of global or const variables, the value of a variable which
+# means will be used and defined while running code, others one has existed in the `final_project` database.
+CALLS = "calls"
+CALLS_COUNT = "calls_count"
+CALLS_HOTSPOT = "calls_hotspot"
+OBS_CALLS = "obs_calls"
 OBS_DATA_911_CALLS = "ObsData911Calls"
-VISUALIZE_SURFACE_CALLS = "_visualize_surface_calls"
-
-
-# The pre-launch tasks have consisted of the operation that at first gives reassurance about removing the old features
-# that were used in the last try. The temporary features are removed, and a copy of the original `calls` data is
-# created. Eventually, the process of integrating the features is executed.
-def initialization():
-    remove_old_features()
-    copy_calls_feature()
-    integrate_calls_in_30_feet()
+VISUALIZE_SURFACE_CALLS = "visualize_surface_calls"
+GWR_911_CALLS = 'gwr_911_calls'
 
 
 # Removes the old features that were created in the last run, the name of each feature starts with an underscore.
@@ -32,7 +21,7 @@ def remove_old_features():
 
 # To keep the original `calls` feature, a version of that is copied into a new feature for use while run.
 def copy_calls_feature():
-    in_feature = "calls"
+    in_feature = "original_calls"
     out_feature = CALLS
     arcpy.CopyFeatures_management(in_feature, out_feature)
 
@@ -44,17 +33,15 @@ def integrate_calls_in_30_feet():
     arcpy.Integrate_management(in_feature, x_y_tolerance)
 
 
-# The process is contained, a single point `feature` for each location in the dataset. Additionally, has a count field
-#  reflects the number of found points.
+# Through the `CALLS` feature, the count's field as `ICount` is measured and added to the `CALLS_COUNT` feature.
 def collect_events_into_calls_count():
     in_feature = CALLS
     out_feature = CALLS_COUNT
     arcpy.CollectEvents_stats(in_feature, out_feature)
 
 
-# The result of the Hot Spot function is a new feature that is symbolized based on whether
-# it is part of a statistically significant hot spot, a statistically significant
-# cold spot, or is not part of any statistically significant cluster
+# Based on the weight of each feature, and study on the wide range of these, approximately 99% it can be sure where is
+# the exact location of hotspot and cold-spot.
 def create_calls_hotspot_stats():
     in_feature = CALLS_COUNT
     input_field = "ICOUNT"
@@ -77,8 +64,8 @@ def idw_neighbour_to_calls():
     idw.save(out_feature)
 
 
-# The regression analysis gives an ability to understand the factors behind observed spatial patterns. In addition,
-# it can determine a better understanding of some factors contributing related to high `calls` volumes.
+# The factors that are effective on the dependent variable are computed by regression. The factors that are determined
+# by `OBS_DATA_911_CALLS` and its effect on the final changes.
 def ordinary_obs_calls_regression():
     in_feature = OBS_DATA_911_CALLS
     unique_id = "UniqID"
@@ -91,7 +78,9 @@ def ordinary_obs_calls_regression():
                                      coefficient_out_table, diagnostic_out_table)
 
 
-# Checks whether the residuals exhibit a random spatial pattern using the Spatial `Autocorrelation` function.
+# At this stage, the question of (Is spatial distribution of accidental exists?) is answered, and it shows that
+# needs to improve the result next step, unless there are any errors the result is suitable.
+# But in this case study, it is necessary to do an extra step to resolve that through a weighted regression.
 def measures_obs_calls_autocorrelation():
     in_feature = OBS_CALLS
     in_field = "StdResid"
@@ -103,10 +92,8 @@ def measures_obs_calls_autocorrelation():
                                        standardization)
 
 
-# According to the `ordinary_obs_calls_regression` function, it should be improved in model results by moving to
-# Geographically Weighted Regression. Because relationships between some or the entire explanatory variables and
-# dependent variables are non-stationary. The GWR default output is a map of model residuals is showed how the
-# relationship between each explanatory variable and the dependent variable is changed across the study area.
+#  This regression method is used, when variables in all ranges can't predict the changes in a fixed way and remain
+#  variable. To resolve that, it's necessary to use GWR regression.
 def geographically_regression_obs_calls():
     in_feature = OBS_DATA_911_CALLS
     dependent_variable = "Calls"
@@ -119,7 +106,9 @@ def geographically_regression_obs_calls():
 
 
 def main():
-    initialization()
+    remove_old_features()
+    copy_calls_feature()
+    integrate_calls_in_30_feet()
     collect_events_into_calls_count()
     create_calls_hotspot_stats()
     idw_neighbour_to_calls()
