@@ -10,13 +10,13 @@ variables also exists here, the value of each variable which is used to keep the
 features' name.
 
 ```
-CALLS = "_calls"
-OBS_CALLS = "_obs_calls"
-CALLS_COUNT = "_calls_count"
-CALLS_HOTSPOT = "_calls_hotspot"
-GWR_911_CALLS = '_gwr_911_calls'
+CALLS = "calls"
+OBS_CALLS = "obs_calls"
+CALLS_COUNT = "calls_count"
+CALLS_HOTSPOT = "calls_hotspot"
+GWR_911_CALLS = 'gwr_911_calls'
 OBS_DATA_911_CALLS = "ObsData911Calls"
-VISUALIZE_SURFACE_CALLS = "_visualize_surface_calls"
+VISUALIZE_SURFACE_CALLS = "visualize_surface_calls"
 ```
 
 ## Initialization
