@@ -60,4 +60,5 @@ Geographically Weighted Regression. Because relationships between some or the en
 variables are non-stationary. The GWR default output is a map of model residuals is showed how the relationship between
 each explanatory variable and the dependent variable is changed across the study area.
 
-[Data Source](https://hub.arcgis.com/content/71a65d35688a4502b123cbdfc99afdee)
+The source data for this project is available in following link:
+[Source](https://www.arcgis.com/sharing/rest/content/items/71a65d35688a4502b123cbdfc99afdee/data)
