@@ -1,6 +1,6 @@
 # Analysis 911 Responses
 
-This project demonstrates how regression analysis is created as an ArcGIS project and contains an explanation of each step.
+This project demonstrates how regression and Hotspot analysis is created as an ArcGIS project and contains an explanation of each step.
 
 ## Variables
 
@@ -59,3 +59,5 @@ According to the `ordinary_obs_calls_regression` function, it should be improved
 Geographically Weighted Regression. Because relationships between some or the entire explanatory variables and dependent
 variables are non-stationary. The GWR default output is a map of model residuals is showed how the relationship between
 each explanatory variable and the dependent variable is changed across the study area.
+
+[Data Source](https://hub.arcgis.com/content/71a65d35688a4502b123cbdfc99afdee)
